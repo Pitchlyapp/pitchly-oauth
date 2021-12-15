@@ -2,7 +2,8 @@ Package.describe({
   name: 'pitchly:pitchly-oauth',
   version: '1.0.0',
   summary: 'Pitchly OAuth flow',
-  documentation: 'README.md'
+  documentation: 'README.md',
+  git: 'https://github.com/Pitchlyapp/pitchly-oauth'
 });
 
 Package.onUse(api => {
