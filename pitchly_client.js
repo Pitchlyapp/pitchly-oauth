@@ -32,7 +32,7 @@ Pitchly.requestCredential = (options, credentialRequestCompleteCallback) => {
     // `&scope=${encodeURIComponent(flatScope)}` +
     `&redirect_uri=${encodeURIComponent(OAuth._redirectUri('pitchly', config))}` +
     `&state=${encodeURIComponent(OAuth._stateParam(loginStyle, credentialToken, options && options.redirectUrl))}` +
-    `&code_challenge=example`;
+    `&code_challenge=hd1tRU1AKBER3cDCwHhGMJM4o5a4x5aXCzMkqs6ZF5J`;
   
   const popupWidth = (options && options.popupOptions && typeof options.popupOptions.width=="number") ? options.popupOptions.width : 800;
   const popupHeight = (options && options.popupOptions && typeof options.popupOptions.height=="number") ? options.popupOptions.height : 750;

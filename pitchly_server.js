@@ -63,7 +63,7 @@ const getAccessToken = async (config, query, callback) => {
       client_secret: OAuth.openSecret(config.secret),
       code: query.code,
       redirect_uri: OAuth._redirectUri('pitchly', config),
-      code_verifier: 'example'
+      code_verifier: 'hd1tRU1AKBER3cDCwHhGMJM4o5a4x5aXCzMkqs6ZF5J'
     };
     // By default, the access token saved in this user's service data has
     // all the scopes authorized to this app by the org it's installed on.
