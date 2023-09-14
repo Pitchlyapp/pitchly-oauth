@@ -114,7 +114,7 @@ const getAccessToken = async (config, query, callback) => {
 const getIdentity = async (config, accessToken, callback) => {
   let response;
   try {
-    const request = await fetch(`${config.origin || 'https://platform.pitchly.com'}/graphql`, {
+    const request = await fetch(`${config.apiOrigin || 'https://main--pitchly.apollographos.net'}/graphql`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
