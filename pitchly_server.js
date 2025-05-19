@@ -18,6 +18,8 @@ OAuth.registerService('pitchly', 2, null, (query) => {
     name: identity.viewer.person.name,
     email: identity.viewer.person.email,
     picture: identity.viewer.person.image,
+    tier: identity.viewer.tier,
+    tierSettings: identity.viewer.tierSettings,
     organizationId: identity.organization.id,
     accessToken: OAuth.sealSecret(accessTokenResponse.access_token)
   };
@@ -134,6 +136,8 @@ const getIdentity = async (config, accessToken, callback) => {
               email
               image
             }
+            tier
+            tierSettings
           }
         }`
       })
