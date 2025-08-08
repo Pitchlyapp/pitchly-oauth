@@ -1,17 +1,15 @@
 Pitchly = {};
 
-OAuth.registerService('pitchly', 2, null, (query) => {
+OAuth.registerService('pitchly', 2, null, async (query) => {
   
-  const config = ServiceConfiguration.configurations.findOne({
+  const config = await ServiceConfiguration.configurations.findOneAsync({
     service: 'pitchly'
   });
   if (!config) throw new ServiceConfiguration.ConfigError();
   
-  const accessTokenCall = Meteor.wrapAsync(getAccessToken);
-  const accessTokenResponse = accessTokenCall(config, query);
+  const accessTokenResponse = await getAccessToken(config, query);
   
-  const identityCall = Meteor.wrapAsync(getIdentity);
-  const identity = identityCall(config, accessTokenResponse.access_token);
+  const identity = await getIdentity(config, accessTokenResponse.access_token);
   
   const serviceData = {
     id: identity.viewer.person.id,
@@ -56,7 +54,7 @@ OAuth.registerService('pitchly', 2, null, (query) => {
 let userAgent = 'Meteor';
 if (Meteor.release) userAgent += `/${Meteor.release}`;
 
-const getAccessToken = async (config, query, callback) => {
+const getAccessToken = async (config, query) => {
   let response;
   try {
     const params = {
@@ -95,25 +93,22 @@ const getAccessToken = async (config, query, callback) => {
     );
     response = await request.json();
   } catch (err) {
-    callback(err.message);
     throw Object.assign(
       new Error(`Failed to complete OAuth handshake with Pitchly. ${err.message}`),
       { response: err.response }
     );
   }
   if (response.error) {
-    callback(response.error);
     // if the http response was a json object with an error attribute
     throw new Error(`Failed to complete OAuth handshake with Pitchly. ${response.error}`);
   } else {
-    callback(null, response);
     return response;
   }
 };
 
 // get user's profile data
 
-const getIdentity = async (config, accessToken, callback) => {
+const getIdentity = async (config, accessToken) => {
   let response;
   try {
     const request = await fetch(`${config.apiOrigin || 'https://main--pitchly.apollographos.net'}/graphql`, {
@@ -144,7 +139,6 @@ const getIdentity = async (config, accessToken, callback) => {
     });
     response = await request.json();
   } catch (err) {
-    callback(err.message);
     throw Object.assign(
       new Error(`Failed to fetch identity from Pitchly. ${err.message}`),
       { response: err.response }
@@ -152,11 +146,9 @@ const getIdentity = async (config, accessToken, callback) => {
   }
   if (!response.data) {
     const error = (Array.isArray(response.errors) && response.errors.length && typeof response.errors[0]=="object" && response.errors[0]!==null && typeof response.errors[0].extensions=="object" && response.errors[0].extensions!==null && typeof response.errors[0].extensions.code=="string") ? response.errors[0].extensions.code : "GraphQL API request failed.";
-    callback(error);
     // return GraphQL error code if there was one
     throw new Error(`Failed to fetch identity from Pitchly. ${error}`);
   } else {
-    callback(null, response.data);
     return response.data;
   }
 };
